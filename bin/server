@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+require 'socket'
+require 'logger'
+
+$LOAD_PATH.unshift Pathname.new(__dir__).join('..')
+
+logger = Logger.new(STDOUT)
+logger.formatter = proc do |severity, datetime, program_name, message|
+  "#{Time.now.strftime('%H:%M:%S')} #{message}\n"
+end
+
+Socket.udp_server_loop(8000) do |message, message_source|
+  logger.info "Received #{message.inspect}"
+  message_source.reply message
+end

@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+require 'socket'
+require 'logger'
+
+$LOAD_PATH.unshift Pathname.new(__dir__).join('..')
+
+require 'src/engine'
+
+def main
+  server_ip = '10.10.10.69'
+  server_port = 8000
+  socket = UDPSocket.new
+  socket.connect(server_ip, server_port)
+
+  logger = Logger.new(STDOUT)
+  logger.formatter = proc do |severity, datetime, program_name, message|
+    "#{Time.now.strftime('%H:%M:%S')} #{message}\n"
+  end
+
+  engine = Engine.new
+  engine.start
+
+  while true
+    if response = engine.next_response
+      logger.info "Sending #{response.to_s.inspect}"
+      socket.send response.to_s, 0
+    end
+
+    message = socket.recvfrom(65536)
+    logger.info "Received #{message[0].inspect}"
+    engine.handle_message message[0]
+  end
+end
+
+main

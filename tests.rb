@@ -50,7 +50,7 @@ class TitleTest < UnitTest
 
   def test_see_or_roll_2
     engine = Engine.new
-    engine.handle_message("NEW DICES;61")
+    engine.handle_message("NEW DICES;65")
     engine.handle_message("SEE OR ROLL")
     response = engine.next_response
     assert_equal "ROLL;KlausDavid", response

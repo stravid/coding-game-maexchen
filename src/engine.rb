@@ -183,7 +183,7 @@ class SeeOrRoll
       end
     end
 
-    index = ranking.index('61')
+    index = ranking.index('65')
 
     if last_index > index
       "SEE;"

@@ -39,14 +39,14 @@ class TitleTest < UnitTest
     assert_equal "SEE;KlausDavid", response
   end
 
-  # def test_see_or_roll_if_only_index_plus_one
-  #   engine = Engine.new
-  #   engine.handle_message("NEW DICES;51")
-  #   engine.handle_message("NEW DICES;52")
-  #   engine.handle_message("SEE OR ROLL")
-  #   response = engine.next_response
-  #   assert_equal "SEE;KlausDavid", response
-  # end
+  def test_see_or_roll_if_only_index_plus_one
+    engine = Engine.new
+    engine.handle_message("NEW DICES;51")
+    engine.handle_message("NEW DICES;52")
+    engine.handle_message("SEE OR ROLL")
+    response = engine.next_response
+    assert_equal "SEE;KlausDavid", response
+  end
 
   def test_see_or_roll_2
     engine = Engine.new

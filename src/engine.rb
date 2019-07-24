@@ -32,6 +32,13 @@ class Engine
 end
 
 class Message
+  # def self.last_dices=(dices)
+  #   @last_dices = dices
+  # end
+
+  # def self.last_dices
+
+  # end
   # def initialize
   #   @last_dices = []
   # end
@@ -42,14 +49,19 @@ class Message
     when "ATTENDING"
       AttendMessage.new
     when "DICES"
-      DicesMessage.new(arguments, @last_dices)
+      DicesMessage.new(arguments, @last_dices.nil? ? nil : @last_dices.last)
     when "SEE OR ROLL"
       SeeOrRoll.new(@last_dices)
     when "NEW DICES"
-      @last_dices = arguments
+      if @last_dices.nil?
+        @last_dices = []
+      end
+
+      @last_dices << arguments
+
       NewDices.new(arguments)
     when "ROUND ENDED"
-      @last_dices = nil
+      @last_dices = []
     else
       NullMessage.new
     end
@@ -143,7 +155,7 @@ class SeeOrRoll
       '45',
       '46',
       '51',
-      '51',
+      '52',
       '53',
       '54',
       '56',
@@ -161,9 +173,17 @@ class SeeOrRoll
       '21',
     ]
 
-    last_index = ranking.index(@dices)
+    last_index = ranking.index(@dices.last)
+
+    if @dices.size > 1
+      second_to_last_dices = ranking.index(@dices[@dices.size - 2])
+
+      if last_index - 1 == second_to_last_dices
+        return "SEE;"
+      end
+    end
+
     index = ranking.index('61')
-    # 11_index = ranking.index('11')
 
     if last_index > index
       "SEE;"
